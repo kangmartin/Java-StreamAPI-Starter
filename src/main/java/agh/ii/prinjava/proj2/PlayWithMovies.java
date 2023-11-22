@@ -1,29 +1,47 @@
 package agh.ii.prinjava.proj2;
 
-import java.util.Map;
-import java.util.Set;
+import agh.ii.prinjava.proj2.dal.ImdbTop250;
+import agh.ii.prinjava.proj2.model.Movie;
+import agh.ii.prinjava.proj2.utils.Utils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 interface PlayWithMovies {
 
-    /**
+     /**
      * Returns the movies (only titles) directed (or co-directed) by a given director
      */
     static Set<String> ex01(String director) {
-        throw new RuntimeException("ex01 is not implemented!");
+        return ImdbTop250.movies()
+                .map(movies -> movies.stream()                                      // stream of all the movies in the database
+                        .filter(movie -> movie.directors().contains(director))      // to have a stream filtered with only the specified directors
+                        .map(Movie::title)                                          // the filtered stream is now mapped into movie titles
+                        .collect(Collectors.toSet()))                               // it collects the title into a set, and the set will contain only unique movie titles
+                .orElse(Set.of());                                                  // else it returns an empty set
     }
 
     /**
      * Returns the movies (only titles) in which an actor played
      */
     static Set<String> ex02(String actor) {
-        throw new RuntimeException("ex02 is not implemented!");
+        return ImdbTop250.movies()
+                .map(movies -> movies.stream()                                  // stream of all the movies in the database
+                        .filter(movie -> movie.actors().contains(actor))        // to have a stream filtered with only the specified actors
+                        .map(Movie::title)                                      // the filtered stream is now mapped into movie titles
+                        .collect(Collectors.toSet()))                           // it collects the title into a set, and the set will contain only unique movie titles
+                .orElse(Set.of());                                              // else it returns an empty set
     }
 
     /**
      * Returns the number of movies per director (as a map)
      */
     static Map<String, Long> ex03() {
-        throw new RuntimeException("ex03 is not implemented!");
+        return ImdbTop250.movies()
+                .map(movies -> movies.stream()                                                              // stream of all the movies in the database
+                        .flatMap(movie -> movie.directors().stream())                                       // to have a stream of all the directors (may have occurrences)
+                        .collect(Collectors.groupingBy(director -> director, Collectors.counting())))       // grouping by the directors to associate each director with the count of occurrences
+                .orElse(Map.of());                                                                          // else it returns an empty map
     }
 
     /**
