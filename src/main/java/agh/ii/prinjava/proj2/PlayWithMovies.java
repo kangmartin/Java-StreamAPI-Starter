@@ -126,7 +126,7 @@ interface PlayWithMovies {
 
         return topActors.entrySet().stream()
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey,
+                        e -> e.getKey(),
                         e -> ImdbTop250.movies()
                                 .map(movies -> movies.stream()
                                         .filter(movie -> movie.actors().contains(e.getKey()))
