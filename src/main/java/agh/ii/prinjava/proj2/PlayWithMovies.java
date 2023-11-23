@@ -126,7 +126,7 @@ interface PlayWithMovies {
 
         return topActors.entrySet().stream()
                 .collect(Collectors.toMap(
-                        e -> e.getKey(),
+                        Map.Entry::getKey,
                         e -> ImdbTop250.movies()
                                 .map(movies -> movies.stream()
                                         .filter(movie -> movie.actors().contains(e.getKey()))
@@ -163,7 +163,7 @@ interface PlayWithMovies {
 
         return topActorDuos.entrySet().stream()
                 .collect(Collectors.toMap(
-                        e -> e.getKey(),
+                        Map.Entry::getKey,
                         e -> ImdbTop250.movies()
                                 .map(movies -> movies.stream()
                                         .filter(movie -> Utils.orderedPairsFrom(movie.actors()).contains(e.getKey()))
